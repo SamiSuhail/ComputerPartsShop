@@ -3,8 +3,10 @@ using AutoMapper.QueryableExtensions;
 using ComputerPartsShop.Controllers.Ram.Models;
 using ComputerPartsShop.Data;
 using ComputerPartsShop.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ComputerPartsShop.Services.Ram
 {
@@ -20,41 +22,43 @@ namespace ComputerPartsShop.Services.Ram
             this.queryableMapper = mapper.ConfigurationProvider;
         }
 
-        public bool Details(int id, out RamModel model)
+        public async Task<RamModel> DetailsAsync(int id)
         {
-            var ram = GetById(id);
+            var ram = await GetByIdAsync(id);
 
             if (ram == null)
             {
-                model = null;
-                return false;
+                return null;
             }
 
-            model = mapper.Map<RamModel>(ram);
-            return true;
+            var model = mapper.Map<RamModel>(ram);
+            return model;
         }
 
-        public IEnumerable<RamModel> List()
-            => this.data.RandomAccessMemories.ProjectTo<RamModel>(this.queryableMapper).ToList();
+        public async Task<IEnumerable<RamModel>> ListAsync()
+            => await this.data.RandomAccessMemories.ProjectTo<RamModel>(this.queryableMapper).ToListAsync();
 
-        public bool Add(RamModel ramModel)
+        public async Task<bool> AddAsync(RamModel ramModel)
         {
             var ram = mapper.Map<RandomAccessMemory>(ramModel);
 
-            if (this.ModelExists(ram))
+            if (await this.ModelExists(ram))
             {
                 return false;
             }
 
-            this.data.RandomAccessMemories.Add(ram);
-            this.data.SaveChanges();
+            await this.data.RandomAccessMemories.AddAsync(ram);
+            await this.data.SaveChangesAsync();
 
             return true;
         }
 
-        public bool Edit(RamModel ramModel)
+        public async Task<bool> IdExistsAsync(int id)
+            => await this.data.RandomAccessMemories.AnyAsync(r => r.Id == id);
+
+        public async Task<bool> EditAsync(RamModel ramModel)
         {
-            var ram = GetById(ramModel.Id);
+            var ram = await GetByIdAsync(ramModel.Id);
 
             if (ram == null)
             {
@@ -69,13 +73,13 @@ namespace ComputerPartsShop.Services.Ram
             ram.Frequency = ramModel.Frequency;
             ram.Generation = ramModel.Generation;
 
-            this.data.SaveChanges();
+            await this.data.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var ram = GetById(id);
+            var ram = await GetByIdAsync(id);
 
             if (ram == null)
             {
@@ -83,14 +87,14 @@ namespace ComputerPartsShop.Services.Ram
             }
 
             this.data.RandomAccessMemories.Remove(ram);
-            this.data.SaveChanges();
+            await this.data.SaveChangesAsync();
             return true;
         }
 
-        private RandomAccessMemory GetById(int id)
-            => this.data.RandomAccessMemories.FirstOrDefault(r => r.Id == id);
+        private async Task<RandomAccessMemory> GetByIdAsync(int id)
+            => await this.data.RandomAccessMemories.FirstOrDefaultAsync(r => r.Id == id);
 
-        private bool ModelExists(RandomAccessMemory ram)
-            => this.data.RandomAccessMemories.Any(r => r.Model == ram.Model);
+        private async Task<bool> ModelExists(RandomAccessMemory ram)
+            => await this.data.RandomAccessMemories.AnyAsync(r => r.Model == ram.Model);
     }
 }

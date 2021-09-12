@@ -2,6 +2,7 @@
 using ComputerPartsShop.Services.Ram;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using static ComputerPartsShop.WebConstants.ErrorMessages;
 
 namespace ComputerPartsShop.Controllers.Ram
@@ -18,29 +19,31 @@ namespace ComputerPartsShop.Controllers.Ram
         }
 
         [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (!this.ramService.Details(id, out var ramModel))
+            if (!await this.ramService.IdExistsAsync(id))
             {
                 return NotFound(RamIdNotFound);
             }
+
+            var ramModel = await this.ramService.DetailsAsync(id);
 
             return Ok(ramModel);
         }
 
         [HttpGet]
-        public IActionResult List()
-            => Ok(this.ramService.List());
+        public async Task<IActionResult> List()
+            => Ok(await this.ramService.ListAsync());
 
         [HttpPost]
-        public IActionResult Add(RamModel model)
+        public async Task<IActionResult> Add(RamModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            if (this.ramService.Add(model))
+            if (await this.ramService.AddAsync(model))
             {
                 return Ok();
             }
@@ -49,14 +52,14 @@ namespace ComputerPartsShop.Controllers.Ram
         }
 
         [HttpPut]
-        public IActionResult Edit(RamModel model)
+        public async Task<IActionResult> Edit(RamModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            if (this.ramService.Edit(model))
+            if (await this.ramService.EditAsync(model))
             {
                 return Ok();
             }
@@ -65,9 +68,9 @@ namespace ComputerPartsShop.Controllers.Ram
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (this.ramService.Delete(id))
+            if (await this.ramService.DeleteAsync(id))
             {
                 return Ok();
             }
