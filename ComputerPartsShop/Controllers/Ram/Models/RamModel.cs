@@ -6,6 +6,7 @@ namespace ComputerPartsShop.Controllers.Ram.Models
 {
     public class RamModel
     {
+        public int Id { get; init; }
         [Required]
         [MaxLength(BrandMax)]
         public string Brand { get; init; }

@@ -6,7 +6,7 @@ using static ComputerPartsShop.WebConstants.ErrorMessages;
 
 namespace ComputerPartsShop.Controllers.Ram
 {
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class RandomAccessMemoryController : ControllerBase
     {
@@ -16,6 +16,21 @@ namespace ComputerPartsShop.Controllers.Ram
         {
             this.ramService = ramService;
         }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            if (!this.ramService.Details(id, out var ramModel))
+            {
+                return NotFound(RamIdNotFound);
+            }
+
+            return Ok(ramModel);
+        }
+
+        [HttpGet]
+        public IActionResult List()
+            => Ok(this.ramService.List());
 
         [HttpPost]
         public IActionResult Add(RamModel model)
@@ -33,9 +48,21 @@ namespace ComputerPartsShop.Controllers.Ram
             return BadRequest(RamModelAlreadyExists);
         }
 
-        [HttpGet]
-        public IActionResult List()
-            => Ok(this.ramService.List());
+        [HttpPut]
+        public IActionResult Edit(RamModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            if (this.ramService.Edit(model))
+            {
+                return Ok();
+            }
+
+            return BadRequest(RamIdNotFound);
+        }
 
         [HttpDelete]
         public IActionResult Delete(int id)
