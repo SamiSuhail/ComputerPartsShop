@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using ComputerPartsShop.Controllers.Ram.Models;
-using ComputerPartsShop.Data;
-using ComputerPartsShop.Data.Models;
+﻿using ComputerPartsShop.Controllers.Ram.Models;
+using ComputerPartsShop.Services.Ram;
 using Microsoft.AspNetCore.Mvc;
+
+using static ComputerPartsShop.WebConstants.ErrorMessages;
 
 namespace ComputerPartsShop.Controllers.Ram
 {
@@ -10,23 +10,22 @@ namespace ComputerPartsShop.Controllers.Ram
     [ApiController]
     public class RandomAccessMemoryController : ControllerBase
     {
-        private ShopDbContext data;
-        private IMapper mapper;
+        private IRamService ramService;
 
-        public RandomAccessMemoryController(ShopDbContext data, IMapper mapper)
+        public RandomAccessMemoryController(IRamService ramService)
         {
-            this.data = data;
-            this.mapper = mapper;
+            this.ramService = ramService;
         }
 
         [HttpPost]
-        public IActionResult Create(RamCreateModel model)
+        public IActionResult Add(RamAddModel model)
         {
-            var ram = mapper.Map<RandomAccessMemory>(model);
-            this.data.RandomAccessMemories.Add(ram);
-            this.data.SaveChanges();
+            if (this.ramService.Add(model))
+            {
+                return Ok();
+            }
 
-            return Ok();
+            return BadRequest(RamModelAlreadyExists);
         }
     }
 }

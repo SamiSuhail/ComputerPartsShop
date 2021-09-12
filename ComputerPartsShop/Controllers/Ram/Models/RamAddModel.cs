@@ -4,7 +4,7 @@ using static ComputerPartsShop.Data.DataConstants.Ram;
 
 namespace ComputerPartsShop.Controllers.Ram.Models
 {
-    public class RamCreateModel
+    public class RamAddModel
     {
         [Range(FrequencyMin, FrequencyMax)]
         public int Frequency { get; init; }

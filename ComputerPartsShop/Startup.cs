@@ -1,5 +1,6 @@
 using ComputerPartsShop.Data;
 using ComputerPartsShop.Infrastructure;
+using ComputerPartsShop.Services.Ram;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace ComputerPartsShop
             services.AddDbContext<ShopDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));
+            services.AddTransient<IRamService, RamService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
