@@ -8,7 +8,8 @@ namespace ComputerPartsShop.Infrastructure
     {
         public MappingProfile()
         {
-            this.CreateMap<RamAddModel, RandomAccessMemory>();
+            this.CreateMap<RamModel, RandomAccessMemory>();
+            this.CreateMap<RandomAccessMemory, RamModel>();
         }
     }
 }

@@ -4,8 +4,19 @@ using static ComputerPartsShop.Data.DataConstants.Ram;
 
 namespace ComputerPartsShop.Controllers.Ram.Models
 {
-    public class RamAddModel
+    public class RamModel
     {
+        [Required]
+        [MaxLength(BrandMax)]
+        public string Brand { get; init; }
+
+        [Required]
+        [MaxLength(ModelMax)]
+        public string Model { get; init; }
+
+        [Range(PriceMin, PriceMax)]
+        public decimal Price { get; init; }
+
         [Range(FrequencyMin, FrequencyMax)]
         public int Frequency { get; init; }
 
@@ -17,16 +28,5 @@ namespace ComputerPartsShop.Controllers.Ram.Models
 
         [Range(GenerationMin, GenerationMax)]
         public int Generation { get; init; }
-
-        [Required]
-        [MaxLength(BrandMax)]
-        public string Brand { get; init; }
-
-        [Required]
-        [MaxLength(ModelMax)]
-        public string Model { get; init; }
-
-        [Range(PriceMin, PriceMax)]
-        public decimal Price { get; init; }
     }
 }

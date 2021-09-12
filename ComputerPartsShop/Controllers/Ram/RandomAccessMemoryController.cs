@@ -1,7 +1,7 @@
 ﻿using ComputerPartsShop.Controllers.Ram.Models;
 using ComputerPartsShop.Services.Ram;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Collections.Generic;
 using static ComputerPartsShop.WebConstants.ErrorMessages;
 
 namespace ComputerPartsShop.Controllers.Ram
@@ -18,8 +18,13 @@ namespace ComputerPartsShop.Controllers.Ram
         }
 
         [HttpPost]
-        public IActionResult Add(RamAddModel model)
+        public IActionResult Add(RamModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             if (this.ramService.Add(model))
             {
                 return Ok();
@@ -27,5 +32,9 @@ namespace ComputerPartsShop.Controllers.Ram
 
             return BadRequest(RamModelAlreadyExists);
         }
+
+        [HttpGet]
+        public IActionResult List()
+            => Ok(this.ramService.List());
     }
 }
