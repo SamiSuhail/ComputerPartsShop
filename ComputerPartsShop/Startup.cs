@@ -30,6 +30,7 @@ namespace ComputerPartsShop
 
             services.AddDbContext<ShopDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddAutoMapper(typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

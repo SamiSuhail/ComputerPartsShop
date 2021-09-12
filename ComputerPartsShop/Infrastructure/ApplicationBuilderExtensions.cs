@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 
 namespace ComputerPartsShop.Infrastructure
 {
@@ -14,7 +15,7 @@ namespace ComputerPartsShop.Infrastructure
             var services = scopedServices.ServiceProvider;
 
             MigrateDatabase(services);
-
+            SeedData(services);
 
             return app;
         }
@@ -24,6 +25,13 @@ namespace ComputerPartsShop.Infrastructure
             var data = services.GetService<ShopDbContext>();
 
             data.Database.Migrate();
+        }
+
+        private static void SeedData(IServiceProvider services)
+        {
+            var data = services.GetService<ShopDbContext>();
+
+            data.SaveChanges();
         }
     }
 }

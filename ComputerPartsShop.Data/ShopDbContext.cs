@@ -13,9 +13,11 @@ namespace ComputerPartsShop.Data
 
         public DbSet<RandomAccessMemory> RandomAccessMemories { get; init; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<RandomAccessMemory>()
+                .HasIndex(r => r.Model)
+                .IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }

@@ -2,12 +2,10 @@
 
 using static ComputerPartsShop.Data.DataConstants.Ram;
 
-namespace ComputerPartsShop.Data.Models
+namespace ComputerPartsShop.Controllers.Ram.Models
 {
-    public class RandomAccessMemory
+    public class RamCreateModel
     {
-        public int Id { get; init; }
-
         [Range(FrequencyMin, FrequencyMax)]
         public int Frequency { get; init; }
 
