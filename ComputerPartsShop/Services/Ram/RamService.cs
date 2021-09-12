@@ -34,6 +34,20 @@ namespace ComputerPartsShop.Services.Ram
             return true;
         }
 
+        public bool Delete(int id)
+        {
+            var ram = this.data.RandomAccessMemories.FirstOrDefault(r => r.Id == id);
+
+            if (ram == null)
+            {
+                return false;
+            }
+
+            this.data.RandomAccessMemories.Remove(ram);
+            this.data.SaveChanges();
+            return true;
+        }
+
         public IEnumerable<RamModel> List()
             => this.data.RandomAccessMemories.ProjectTo<RamModel>(this.queryableMapper).ToList();
 

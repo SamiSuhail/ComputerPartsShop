@@ -7,5 +7,6 @@ namespace ComputerPartsShop.Services.Ram
     {
         public bool Add(RamModel ramModel);
         public IEnumerable<RamModel> List();
+        public bool Delete(int id);
     }
 }

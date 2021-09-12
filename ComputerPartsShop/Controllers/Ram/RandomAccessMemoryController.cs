@@ -36,5 +36,16 @@ namespace ComputerPartsShop.Controllers.Ram
         [HttpGet]
         public IActionResult List()
             => Ok(this.ramService.List());
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            if (this.ramService.Delete(id))
+            {
+                return Ok();
+            }
+
+            return NotFound(RamIdNotFound);
+        }
     }
 }
